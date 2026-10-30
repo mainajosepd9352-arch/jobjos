@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyBiz - Small Business Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div>
+            <h1>MyBiz</h1>
+            <p>Your Small Business Manager</p>
+        </div>
+        <span class="header-tag">BUSINESS DASHBOARD</span>
+    </header>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#products">Products</a>
+        <a href="#sales">Sales</a>
+        <a href="#reports">Reports</a>
+    </nav>
+
+    <main>
+        <section id="dashboard">
+            <h2>Dashboard</h2>
+            <p id="today"></p>
+
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <p>Total Sales</p>
+                    <h3 id="totalSales">KSh 0.00</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Total Profit</p>
+                    <h3 id="totalProfit">KSh 0.00</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Products</p>
+                    <h3 id="productCount">0</h3>
+                </div>
+
+                <div class="stat-card">
+                    <p>Transactions</p>
+                    <h3 id="transactionCount">0</h3>
+                </div>
+            </div>
+        </section>
+
+        <section id="products" class="panel">
+            <h2>Products</h2>
+            <p>Add products and manage your stock.</p>
+
+            <form id="productForm">
+                <label for="productName">Product Name</label>
+                <input
+                    type="text"
+                    id="productName"
+                    placeholder="e.g. Ndazi"
+                    required
+                >
+
+                <label for="productCost">Buying Price per Item (KSh)</label>
+                <input
+                    type="number"
+                    id="productCost"
+                    min="0"
+                    step="0.01"
+                    placeholder="e.g. 70"
+                    required
+                >
+
+                <label for="productPrice">Selling Price per Item (KSh)</label>
+                <input
+                    type="number"
+                    id="productPrice"
+                    min="0.01"
+                    step="0.01"
+                    placeholder="e.g. 120"
+                    required
+                >
+
+                <label for="productQuantity">Quantity in Stock</label>
+                <input
+                    type="number"
+                    id="productQuantity"
+                    min="0"
+                    step="1"
+                    placeholder="e.g. 20"
+                    required
+                >
+
+                <label for="productImage">Product Image</label>
+                <input
+                    type="file"
+                    id="productImage"
+                    accept="image/*"
+                    required
+                >
+
+                <button type="submit">Add Product</button>
+            </form>
+
+            <h3>Product List</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Product</th>
+                            <th>Buying Price</th>
+                            <th>Selling Price</th>
+                            <th>Stock</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="sales" class="panel">
+            <h2>Record a Sale</h2>
+
+            <form id="salesForm">
+                <label for="saleProduct">Choose Product</label>
+                <select id="saleProduct" required>
+                    <option value="">Select a product</option>
+                </select>
+
+                <label for="saleQuantity">Quantity Sold</label>
+                <input
+                    type="number"
+                    id="saleQuantity"
+                    min="1"
+                    step="1"
+                    placeholder="e.g. 2"
+                    required
+                >
+
+                <button type="submit" class="sale-button">
+                    Record Sale
+                </button>
+            </form>
+
+            <h3>Sales History</h3>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Revenue</th>
+                            <th>Profit</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesTable"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="reports" class="panel">
+            <h2>Business Summary</h2>
+            <p>Total revenue is the money earned from sales.</p>
+            <p>Total profit is revenue minus the buying cost of items sold.</p>
+            <p id="reportSummary">Your business summary will appear here.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>MyBiz &copy; 2026 | Small Business Manager</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
