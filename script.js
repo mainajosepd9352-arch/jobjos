@@ -2,18 +2,25 @@
 
 /*
  * MYBIZ
- * Local product and sales storage.
- * Public reviews will be connected to Supabase in the next step.
+ * Products, stock, sales, returns, reports and public reviews.
  */
 
 const DATA_KEY = "myBizData";
-const OLD_DATA_KEY = "myBizReviews";
 
 let products = [];
 let transactions = [];
-let reviews = [];
 
 const $ = (id) => document.getElementById(id);
+
+// SUPABASE CONNECTION
+const SUPABASE_URL = "https://qrpwmovdkzvigmflvqmm.supabase.co";
+
+const SUPABASE_KEY = "sb_publishable_KZ7b0N0m7ciqGqYmtJjCjg_s3JAaiAp";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
 
 function today() {
     const now = new Date();
@@ -45,10 +52,6 @@ function loadData() {
         products = Array.isArray(saved.products) ? saved.products : [];
         transactions = Array.isArray(saved.transactions) ? saved.transactions : [];
 
-        /*
-         * Migrate the older MyBiz format when it is present.
-         * Old sales become transactions so their history remains available.
-         */
         if (transactions.length === 0 && Array.isArray(saved.sales)) {
             transactions = saved.sales.map((sale, index) => ({
                 id: sale.id || `legacy-${index}-${Date.now()}`,
@@ -68,13 +71,10 @@ function loadData() {
                 returned: Boolean(sale.returned)
             }));
         }
-
-        reviews = [];
     } catch (error) {
         console.error("Unable to load MyBiz data:", error);
         products = [];
         transactions = [];
-        reviews = [];
     }
 }
 
@@ -515,27 +515,111 @@ function renderDashboard() {
 }
 
 /* =========================
-   REVIEWS — ONLINE SETUP PENDING
+   PUBLIC REVIEWS — SUPABASE
    ========================= */
 
-/*
- * Reviews are intentionally not stored locally in this version.
- * Supabase will be configured next so reviews can be shared publicly.
- */
+// DISPLAY PUBLIC REVIEWS
+async function renderReviews() {
+    const reviewList = $("reviewList");
 
-function renderReviewsNotConnected() {
-    $("reviewList").innerHTML =
-        '<p class="empty-state">Public reviews are not connected yet.</p>';
+    if (!reviewList) return;
+
+    reviewList.textContent = "Loading reviews...";
+
+    const { data, error } = await supabaseClient
+        .from("reviews")
+        .select("id, name, reaction, message, created_at")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        reviewList.textContent = "Could not load reviews. Please try again.";
+        console.error("Review loading error:", error);
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        reviewList.textContent =
+            "No reviews yet. Be the first to review!";
+        return;
+    }
+
+    reviewList.innerHTML = "";
+
+    data.forEach(review => {
+        const card = document.createElement("div");
+        card.className = "review-card";
+
+        const name = document.createElement("h3");
+        name.textContent = review.name;
+
+        const reaction = document.createElement("p");
+        reaction.textContent = review.reaction;
+
+        const message = document.createElement("p");
+        message.textContent = review.message;
+
+        const date = document.createElement("small");
+        date.textContent = new Date(
+            review.created_at
+        ).toLocaleDateString();
+
+        card.append(name, reaction, message, date);
+        reviewList.appendChild(card);
+    });
 }
 
-function handleReviewSubmit(event) {
+// SUBMIT PUBLIC REVIEW
+async function handleReviewSubmit(event) {
     event.preventDefault();
+
+    const name = $("reviewName").value.trim();
+    const reaction = $("reviewReaction").value;
+    const message = $("reviewText").value.trim();
+
+    if (!name || !reaction || !message) {
+        setMessage("reviewMessage", "Please complete all fields.", true);
+        return;
+    }
+
+    const submitButton = $("reviewForm").querySelector(
+        'button[type="submit"]'
+    );
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Submitting...";
+
+    const { error } = await supabaseClient
+        .from("reviews")
+        .insert([
+            {
+                name: name,
+                reaction: reaction,
+                message: message
+            }
+        ]);
+
+    submitButton.disabled = false;
+    submitButton.textContent = "Submit Review";
+
+    if (error) {
+        console.error("Review submission error:", error);
+        setMessage(
+            "reviewMessage",
+            "Could not submit your review. Please try again.",
+            true
+        );
+        return;
+    }
+
+    $("reviewForm").reset();
 
     setMessage(
         "reviewMessage",
-        "Public reviews are not connected yet. We will enable them after setting up the online database.",
-        true
+        "Thank you! Your review has been published.",
+        false
     );
+
+    await renderReviews();
 }
 
 /* =========================
@@ -547,7 +631,7 @@ function renderAll() {
     renderTransactions();
     renderReport();
     renderDashboard();
-    renderReviewsNotConnected();
+    renderReviews();
 }
 
 function startMyBiz() {
