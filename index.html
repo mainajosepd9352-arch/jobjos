@@ -1,181 +1,373 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyBiz - Small Business Manager</title>
+    <meta name="description" content="MyBiz product, sales, stock and daily report manager">
+    <title>MyBiz | Business Manager</title>
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
 
-    <header class="main-header">
-        <div>
-            <h1>MyBiz</h1>
-            <p>Your Small Business Manager</p>
+<body>
+    <header class="site-header">
+        <div class="brand">
+            <img src="favicon.svg" alt="MyBiz logo" class="logo">
+            <div>
+                <h1>MyBiz</h1>
+                <p>Your business, organized.</p>
+            </div>
         </div>
-        <span class="header-tag">BUSINESS DASHBOARD</span>
+
+        <nav class="main-nav">
+            <a href="#dashboard">Dashboard</a>
+            <a href="#products">Products</a>
+            <a href="#sales">Sales</a>
+            <a href="#reports">Reports</a>
+            <a href="#reviews">Reviews</a>
+            <a href="#support">Contact</a>
+        </nav>
     </header>
 
-    <nav>
-        <a href="#dashboard">Dashboard</a>
-        <a href="#products">Products</a>
-        <a href="#sales">Sales</a>
-        <a href="#reports">Reports</a>
-    </nav>
+    <main class="container">
 
-    <main>
-        <section id="dashboard">
-            <h2>Dashboard</h2>
-            <p id="today"></p>
-
-            <div class="dashboard-grid">
-                <div class="stat-card">
-                    <p>Total Sales</p>
-                    <h3 id="totalSales">KSh 0.00</h3>
+        <!-- DASHBOARD -->
+        <section id="dashboard" class="section">
+            <div class="section-heading">
+                <div>
+                    <h2>Dashboard</h2>
+                    <p>Your business overview.</p>
                 </div>
 
-                <div class="stat-card">
-                    <p>Total Profit</p>
-                    <h3 id="totalProfit">KSh 0.00</h3>
+                <div class="date-display">
+                    <label for="viewDate">Dashboard date</label>
+                    <input type="date" id="viewDate">
                 </div>
+            </div>
 
-                <div class="stat-card">
-                    <p>Products</p>
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <p>Sales for selected day</p>
+                    <h3 id="todaySales">KSh 0.00</h3>
+                </article>
+
+                <article class="stat-card">
+                    <p>Profit for selected day</p>
+                    <h3 id="todayProfit">KSh 0.00</h3>
+                </article>
+
+                <article class="stat-card">
+                    <p>Active products</p>
                     <h3 id="productCount">0</h3>
-                </div>
+                </article>
 
-                <div class="stat-card">
-                    <p>Transactions</p>
+                <article class="stat-card">
+                    <p>Transactions for selected day</p>
                     <h3 id="transactionCount">0</h3>
+                </article>
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section id="products" class="section">
+            <div class="section-heading">
+                <div>
+                    <h2>Products</h2>
+                    <p>Add products or discontinue products you no longer sell.</p>
                 </div>
             </div>
-        </section>
 
-        <section id="products" class="panel">
-            <h2>Products</h2>
-            <p>Add products and manage your stock.</p>
+            <form id="productForm" class="form-card">
+                <h3>Add a product</h3>
 
-            <form id="productForm">
-                <label for="productName">Product Name</label>
-                <input
-                    type="text"
-                    id="productName"
-                    placeholder="e.g. Ndazi"
-                    required
-                >
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="productName">Product name</label>
+                        <input
+                            type="text"
+                            id="productName"
+                            placeholder="e.g. Ndazi"
+                            required
+                        >
+                    </div>
 
-                <label for="productCost">Buying Price per Item (KSh)</label>
-                <input
-                    type="number"
-                    id="productCost"
-                    min="0"
-                    step="0.01"
-                    placeholder="e.g. 70"
-                    required
-                >
+                    <div class="form-group">
+                        <label for="productCost">Cost per item (KSh)</label>
+                        <input
+                            type="number"
+                            id="productCost"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+                    </div>
 
-                <label for="productPrice">Selling Price per Item (KSh)</label>
-                <input
-                    type="number"
-                    id="productPrice"
-                    min="0.01"
-                    step="0.01"
-                    placeholder="e.g. 120"
-                    required
-                >
+                    <div class="form-group">
+                        <label for="productPrice">Selling price per item (KSh)</label>
+                        <input
+                            type="number"
+                            id="productPrice"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+                    </div>
 
-                <label for="productQuantity">Quantity in Stock</label>
-                <input
-                    type="number"
-                    id="productQuantity"
-                    min="0"
-                    step="1"
-                    placeholder="e.g. 20"
-                    required
-                >
+                    <div class="form-group">
+                        <label for="productQuantity">Opening stock quantity</label>
+                        <input
+                            type="number"
+                            id="productQuantity"
+                            min="0"
+                            step="1"
+                            required
+                        >
+                    </div>
 
-                <label for="productImage">Product Image</label>
-                <input
-                    type="file"
-                    id="productImage"
-                    accept="image/*"
-                    required
-                >
+                    <div class="form-group full-width">
+                        <label for="productImage">Product picture (optional)</label>
+                        <input
+                            type="file"
+                            id="productImage"
+                            accept="image/*"
+                        >
+                        <small>Choose a picture from your device.</small>
+                    </div>
+                </div>
 
-                <button type="submit">Add Product</button>
-            </form>
-
-            <h3>Product List</h3>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Image</th>
-                            <th>Product</th>
-                            <th>Buying Price</th>
-                            <th>Selling Price</th>
-                            <th>Stock</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productTable"></tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="sales" class="panel">
-            <h2>Record a Sale</h2>
-
-            <form id="salesForm">
-                <label for="saleProduct">Choose Product</label>
-                <select id="saleProduct" required>
-                    <option value="">Select a product</option>
-                </select>
-
-                <label for="saleQuantity">Quantity Sold</label>
-                <input
-                    type="number"
-                    id="saleQuantity"
-                    min="1"
-                    step="1"
-                    placeholder="e.g. 2"
-                    required
-                >
-
-                <button type="submit" class="sale-button">
-                    Record Sale
+                <button type="submit" class="btn btn-primary">
+                    Add Product
                 </button>
             </form>
 
-            <h3>Sales History</h3>
+            <div class="table-card">
+                <div class="table-heading">
+                    <h3>Active products</h3>
+                    <p>Deleting a product will not erase its previous transactions.</p>
+                </div>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Quantity</th>
-                            <th>Revenue</th>
-                            <th>Profit</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody id="salesTable"></tbody>
-                </table>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Cost</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="productTable">
+                            <tr>
+                                <td colspan="5">Loading products...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <section id="reports" class="panel">
-            <h2>Business Summary</h2>
-            <p>Total revenue is the money earned from sales.</p>
-            <p>Total profit is revenue minus the buying cost of items sold.</p>
-            <p id="reportSummary">Your business summary will appear here.</p>
+        <!-- SALES -->
+        <section id="sales" class="section">
+            <div class="section-heading">
+                <div>
+                    <h2>Sales</h2>
+                    <p>Record a sale and update your stock.</p>
+                </div>
+
+                <button type="button" id="newSaleBtn" class="btn btn-secondary">
+                    New Sale
+                </button>
+            </div>
+
+            <form id="salesForm" class="form-card">
+                <h3>Record a sale</h3>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="saleProduct">Product</label>
+                        <select id="saleProduct" required>
+                            <option value="">Select a product</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="saleQuantity">Quantity sold</label>
+                        <input
+                            type="number"
+                            id="saleQuantity"
+                            min="1"
+                            step="1"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Record Sale
+                </button>
+
+                <p id="saleMessage" class="message" aria-live="polite"></p>
+            </form>
+
+            <div class="table-card">
+                <div class="table-heading">
+                    <h3>Transaction history</h3>
+                    <p>Sales and returns are recorded here.</p>
+                </div>
+
+                <div class="filter-row">
+                    <div class="form-group">
+                        <label for="transactionDate">View transactions for</label>
+                        <input type="date" id="transactionDate">
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Product</th>
+                                <th>Type</th>
+                                <th>Quantity</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="salesTable">
+                            <tr>
+                                <td colspan="6">Loading transactions...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </section>
+
+        <!-- REPORTS -->
+        <section id="reports" class="section">
+            <div class="section-heading">
+                <div>
+                    <h2>Daily Reports</h2>
+                    <p>Choose a date to review that day's business activity.</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="form-group">
+                    <label for="reportDate">Report date</label>
+                    <input type="date" id="reportDate">
+                </div>
+
+                <div id="reportSummary" class="report-grid">
+                    <p>Select a date to view its report.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PUBLIC REVIEWS -->
+        <section id="reviews" class="section">
+            <div class="section-heading">
+                <div>
+                    <h2>Customer Reviews</h2>
+                    <p>Share your experience and read what others say.</p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3>Leave a review</h3>
+
+                <form id="reviewForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="reviewName">Display name</label>
+                            <input
+                                type="text"
+                                id="reviewName"
+                                maxlength="50"
+                                placeholder="Your name or nickname"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="reviewReaction">Your reaction</label>
+                            <select id="reviewReaction" required>
+                                <option value="😍">😍 Love it</option>
+                                <option value="👍">👍 Like</option>
+                                <option value="😊">😊 Happy</option>
+                                <option value="😐">😐 It's okay</option>
+                                <option value="👎">👎 Dislike</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="reviewText">Your review</label>
+                            <textarea
+                                id="reviewText"
+                                rows="4"
+                                maxlength="1000"
+                                placeholder="Tell us about your experience..."
+                                required
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        Submit Review
+                    </button>
+
+                    <p id="reviewMessage" class="message" aria-live="polite"></p>
+                </form>
+            </div>
+
+            <div class="table-card">
+                <div class="table-heading">
+                    <h3>Reviews from visitors</h3>
+                    <p>Public reviews will appear here once the online database is configured.</p>
+                </div>
+
+                <div id="reviewList" class="review-list">
+                    <p class="empty-state">
+                        Public reviews are not connected yet.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="support" class="section">
+            <div class="section-heading">
+                <div>
+                    <h2>Contact</h2>
+                    <p>Get in touch.</p>
+                </div>
+            </div>
+
+            <div class="contact-card">
+                <p>
+                    <strong>Email:</strong>
+                    <a href="mailto:jisantle2905@gmail.com">
+                        jisantle2905@gmail.com
+                    </a>
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    <a href="tel:+254794235177">+254794235177</a>
+                </p>
+            </div>
+        </section>
+
     </main>
 
-    <footer>
-        <p>MyBiz &copy; 2026 | Small Business Manager</p>
+    <footer class="site-footer">
+        <p>&copy; <span id="currentYear"></span> MyBiz. All rights reserved.</p>
+        <p>Your business, organized.</p>
     </footer>
 
     <script src="script.js"></script>
